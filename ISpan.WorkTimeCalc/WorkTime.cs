@@ -2,9 +2,12 @@
 {
 	public class WorkTime
 	{
+		// 定義上班時間
 		private const int workBegin = 9;
+		// 定義下班時間
 		private const int workEnd = 18;
 
+		// 將需要扣除的休息時間放入陣列
 		private int[] _restTimes = { 12 };
 		private List<int> RestTime => _restTimes.ToList();
 		/// <summary>
@@ -29,18 +32,20 @@
 		/// <returns></returns>
 		public int LeaveHoursCalc(int leaveBegin, int leaveEnd)
 		{
+			// 驗證開始、結束時間，不合法即回傳 -1
 			if (!IsReasonableTime(leaveBegin, leaveEnd)) return -1;
 
 			leaveBegin = Math.Max(leaveBegin, workBegin); // 如果開始時間小於上班時間，等於上班時間
 			leaveEnd = Math.Min(leaveEnd, workEnd); // 如果結束時間大於下班時間，等於下班時間
 
+			// 獲得一個正式請假的時間段清單(過濾掉休息時間)
 			List<int> leaveHours = HoursToList(leaveBegin, leaveEnd, RestTime);
 
 			return leaveHours.Count;
 		}
 
 		/// <summary>
-		/// 將時間篩選後放入清單
+		/// 將時間過濾後放入列表
 		/// </summary>
 		/// <param name="begin">開始時間</param>
 		/// <param name="end">結束時間</param>
@@ -53,7 +58,9 @@
 
 			for (int i = begin; i < end; i++)
 			{
+				// 如果此時間為需要過濾掉的時間，直接進入下一圈，不添加此時間
 				if (filterList.Contains(i)) continue;
+
 				hourList.Add(i);
 			}
 
@@ -61,7 +68,7 @@
 		}
 
 		/// <summary>
-		/// 驗證時間數字是否非法
+		/// 驗證時間數字是否合法
 		/// </summary>
 		/// <param name="begin">開始時間</param>
 		/// <param name="end">結束時間</param>
